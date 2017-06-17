@@ -2,32 +2,40 @@
 <items version="2" >
 
     <item
-        jar="F:\_AndroidDevelopment\Mkachuee-deepcore-e9b12c2dc060\_Final CNN Tests\CaffeNet Demo\MyApplication\app\libs\junit-4.8.2.jar"
+        is-multidex="false"
+        jar="C:\Users\dedoo\Documents\asrada\app\libs\msgpack-0.6.8.jar"
         jumboMode="false"
-        revision="23.0.3"
-        sha1="c94f54227b08100974c36170dcb53329435fe5ad">
-        <dex dex="F:\_AndroidDevelopment\Mkachuee-deepcore-e9b12c2dc060\_Final CNN Tests\CaffeNet Demo\MyApplication\app\build\intermediates\pre-dexed\debug\junit-4.8.2-35fdf75623ba304c9fe1176e29309bdaa44df749.jar" />
-    </item>
-    <item
-        jar="F:\_AndroidDevelopment\Mkachuee-deepcore-e9b12c2dc060\_Final CNN Tests\CaffeNet Demo\MyApplication\app\libs\msgpack-0.6.8.jar"
-        jumboMode="false"
-        revision="23.0.3"
+        optimize="true"
+        revision="25.0.0"
         sha1="4a7f406732027c0bd80efa40ec4adbb0741d8c34">
-        <dex dex="F:\_AndroidDevelopment\Mkachuee-deepcore-e9b12c2dc060\_Final CNN Tests\CaffeNet Demo\MyApplication\app\build\intermediates\pre-dexed\debug\msgpack-0.6.8-0f40baeb6fc941c709f3a0bd231d89af80a827e6.jar" />
+        <dex dex="C:\Users\dedoo\Documents\asrada\app\build\intermediates\pre-dexed\debug\msgpack-0.6.8_5dd69c573f3ca1444e88e9a12522d4cbc4a84e50.jar" />
     </item>
     <item
-        jar="F:\_AndroidDevelopment\Mkachuee-deepcore-e9b12c2dc060\_Final CNN Tests\CaffeNet Demo\MyApplication\app\libs\javassist-3.16.1-GA.jar"
+        is-multidex="false"
+        jar="C:\Users\dedoo\Documents\asrada\app\libs\junit-4.8.2.jar"
         jumboMode="false"
-        revision="23.0.3"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c94f54227b08100974c36170dcb53329435fe5ad">
+        <dex dex="C:\Users\dedoo\Documents\asrada\app\build\intermediates\pre-dexed\debug\junit-4.8.2_9d0d22feda338f5256720176f4a1281b543781c2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\dedoo\Documents\asrada\app\libs\javassist-3.16.1-GA.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
         sha1="315891b371395271977af518d4db5cee1a0bc9bf">
-        <dex dex="F:\_AndroidDevelopment\Mkachuee-deepcore-e9b12c2dc060\_Final CNN Tests\CaffeNet Demo\MyApplication\app\build\intermediates\pre-dexed\debug\javassist-3.16.1-GA-1f45172e592f4db9a7ceb26026c7bf2fd83ee6ea.jar" />
+        <dex dex="C:\Users\dedoo\Documents\asrada\app\build\intermediates\pre-dexed\debug\javassist-3.16.1-GA_3a631354711dc392e11a92d8cddc1883c6a43588.jar" />
     </item>
     <item
-        jar="F:\_AndroidDevelopment\Mkachuee-deepcore-e9b12c2dc060\_Final CNN Tests\CaffeNet Demo\MyApplication\app\libs\json-simple-1.1.1.jar"
+        is-multidex="false"
+        jar="C:\Users\dedoo\Documents\asrada\app\libs\json-simple-1.1.1.jar"
         jumboMode="false"
-        revision="23.0.3"
+        optimize="true"
+        revision="25.0.0"
         sha1="c9ad4a0850ab676c5c64461a05ca524cdfff59f1">
-        <dex dex="F:\_AndroidDevelopment\Mkachuee-deepcore-e9b12c2dc060\_Final CNN Tests\CaffeNet Demo\MyApplication\app\build\intermediates\pre-dexed\debug\json-simple-1.1.1-95d7659c45529728c9745b4d2b54b7858b519e92.jar" />
+        <dex dex="C:\Users\dedoo\Documents\asrada\app\build\intermediates\pre-dexed\debug\json-simple-1.1.1_a2b66b53f5dbc12ee345963fc9cb09457c1b572a.jar" />
     </item>
 
 </items>
