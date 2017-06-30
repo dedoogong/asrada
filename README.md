@@ -1,13 +1,17 @@
 # asrada
 main reference : https://github.com/Theano/Theano/issues/5348
+
 download gits 
 1. window-caffe : https://github.com/BVLC/caffe/tree/windows
 2. mtcnn-python : https://github.com/kuangliu/pycaffe-mtcnn
 3. DeepAlignmentN : https://github.com/MarekKowalski/DeepAlignmentNetwork
 Windows - Theano
 
-  1. Install Anaconda3 under C:\
-  2. sudo apt-get install python-numpy python-scipy python-dev python-pip python-nose g++ libopenblas-dev git
+  1-1.Install Anaconda3 under C:\
+  1-2.conda create -n py27 anaconda python=2.7
+  1-3. activate py27
+  
+  2. sudo apt-get install python-numpy python-scipy python-dev python-pip python-nose g++ libopenblas-dev git
 
     [global]
     floatx = float32
@@ -24,6 +28,10 @@ Windows - Theano
 
     [nvcc]
     flags=--cl-version=2015 -D_FORCE_INLINES
+    
+    3. conda install theano
+    
+    4. download lasagne and modify requriements.txt to theano-0.9
 
 Ubuntu - Theano
 
