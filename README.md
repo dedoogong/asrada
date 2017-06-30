@@ -1,5 +1,8 @@
 # asrada
-
+download gits 
+1. window-caffe : https://github.com/BVLC/caffe/tree/windows
+2. mtcnn-python : https://github.com/kuangliu/pycaffe-mtcnn
+3. DeepAlignmentN : https://github.com/MarekKowalski/DeepAlignmentNetwork
 Windows - Theano
 
   1. Install Anaconda3 under C:\
