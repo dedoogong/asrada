@@ -9,6 +9,7 @@ Windows - Theano
 
   1-1.Install Anaconda3 under C:\
   1-2.conda create -n py27 anaconda python=2.7
+  
   1-3. activate py27
   
   2. sudo apt-get install python-numpy python-scipy python-dev python-pip python-nose g++ libopenblas-dev git
