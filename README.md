@@ -1,4 +1,5 @@
 # asrada
+main reference : https://github.com/Theano/Theano/issues/5348
 download gits 
 1. window-caffe : https://github.com/BVLC/caffe/tree/windows
 2. mtcnn-python : https://github.com/kuangliu/pycaffe-mtcnn
