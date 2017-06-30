@@ -26,6 +26,7 @@ Ubuntu - Theano
 1. Install Anaconda2
 
 2. Install Theano 
+
 [global]
 floatx = float32
 device = gpu
