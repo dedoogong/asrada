@@ -3,7 +3,7 @@ import os
 import sys
 
 
-path =r"E:\Parking"
+path =r"E:\Blackbox"
 
 for root, dirs, files in os.walk(path):
 
