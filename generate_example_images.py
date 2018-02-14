@@ -104,6 +104,7 @@ def draw_single_sequential_images(img_path,idx):
 def draw_per_augmenter_images(img_path,idx):
     print("[draw_per_augmenter_images] Loading image...")
     image = ndimage.imread(img_path)
+    print(img_path)
     textPath = img_path.replace('.jpg','.txt')
     f=open(textPath , 'r')
     rows_keypoints=[]
@@ -125,18 +126,16 @@ def draw_per_augmenter_images(img_path,idx):
     f.close()
     keypoints = [ia.KeypointsOnImage(rows_keypoints, shape=image.shape)]
     print("[draw_per_augmenter_images] Initializing...")
+
     rows_augmenters = [
-        (0, "Crop\n(top, right,\nbottom, left)", [(str(vals), iaa.Crop(px=vals)) for vals in [(2, 0, 0, 0), (0, 8, 8, 0), (4, 0, 16, 4), (8, 0, 0, 32), (32, 64, 0, 0)]]),
-        (0, "Pad\n(top, right,\nbottom, left)", [(str(vals), iaa.Pad(px=vals)) for vals in [(2, 0, 0, 0), (0, 8, 8, 0), (4, 0, 16, 4), (8, 0, 0, 32), (32, 64, 0, 0)]]),
-        (0, "Fliplr", [(str(p), iaa.Fliplr(p)) for p in [1, 1, 1, 1, 1]]),
-        (0, "Flipud", [(str(p), iaa.Flipud(p)) for p in [1, 1, 1, 1, 1]]),
-        (0, "Add", [("value=%d" % (val,), iaa.Add(val)) for val in [-45, -25, 0, 25, 45]]),
-        (0, "Add\n(per channel)", [("value=(%d, %d)" % (vals[0], vals[1],), iaa.Add(vals, per_channel=True)) for vals in [(-55, -35), (-35, -15), (-10, 10), (15, 35), (35, 55)]]),
-        (0, "AddToHueAndSaturation", [("value=%d" % (val,), iaa.AddToHueAndSaturation(val)) for val in [-45, -25, 0, 25, 45]]),
-        (0, "Multiply", [("value=%.2f" % (val,), iaa.Multiply(val)) for val in [0.25, 0.5, 1.0, 1.25, 1.5]]),
+        (0, "Crop\n(top, right,\nbottom, left)", [(str(vals), iaa.Crop(px=vals)) for vals in [(64, 128, 64, 0), (0,64, 64, 128), (64, 0, 64, 64), (64, 64, 0, 128)]]),
+        (0, "Fliplr", [(str(p), iaa.Fliplr(p)) for p in [1]]),
+        (0, "Flipud", [(str(p), iaa.Flipud(p)) for p in [1]]),
+        (0, "Add", [("value=%d" % (val,), iaa.Add(val)) for val in [-45, -25, 25, 45]]),
+        (0, "Multiply", [("value=%.2f" % (val,), iaa.Multiply(val)) for val in [0.25, 0.5, 1.25, 1.5]]),
         (0, "GaussianBlur", [("sigma=%.2f" % (sigma,), iaa.GaussianBlur(sigma=sigma)) for sigma in [0.25, 0.50, 1.0, 2.0, 4.0]]),
         (0, "BilateralBlur\nsigma_color=250,\nsigma_space=250", [("d=%d" % (d,), iaa.BilateralBlur(d=d, sigma_color=250, sigma_space=250)) for d in [1, 3, 5, 7, 9]]),
-        (0, "Sharpen\n(alpha=1)", [("lightness=%.2f" % (lightness,), iaa.Sharpen(alpha=1, lightness=lightness)) for lightness in [0, 0.5, 1.0, 1.5, 2.0]]),
+        (0, "Sharpen\n(alpha=1)", [("lightness=%.2f" % (lightness,), iaa.Sharpen(alpha=1, lightness=lightness)) for lightness in [0.5, 1.0, 1.5, 2.0]]),
         (0, "Emboss\n(alpha=1)", [("strength=%.2f" % (strength,), iaa.Emboss(alpha=1, strength=strength)) for strength in [0, 0.5, 1.0, 1.5, 2.0]]),
         (0, "AdditiveGaussianNoise", [("scale=%.2f*255" % (scale,), iaa.AdditiveGaussianNoise(scale=scale * 255)) for scale in [0.025, 0.05, 0.1, 0.2, 0.3]]),
         (0, "Dropout", [("p=%.2f" % (p,), iaa.Dropout(p=p)) for p in [0.025, 0.05, 0.1, 0.2, 0.4]]),
@@ -144,22 +143,22 @@ def draw_per_augmenter_images(img_path,idx):
         (0, "CoarseSaltAndPepper\n(p=0.2)", [("size_percent=%.2f" % (size_percent,), iaa.CoarseSaltAndPepper(p=0.2, size_percent=size_percent, min_size=2)) for size_percent in [0.3, 0.2, 0.1, 0.05, 0.02]]),
         (0, "ContrastNormalization", [("alpha=%.1f" % (alpha,), iaa.ContrastNormalization(alpha=alpha)) for alpha in [0.5, 0.75, 1.0, 1.25, 1.50]]),
         (6, "PerspectiveTransform", [("scale=%.3f" % (scale,), iaa.PerspectiveTransform(scale=scale)) for scale in [0.075, 0.075, 0.10, 0.125, 0.125]]),
-        (0, "Affine: Scale", [("%.1fx" % (scale,), iaa.Affine(scale=scale)) for scale in [0.1, 0.5, 1.0, 1.5, 1.9]]),
+        (0, "Affine: Scale", [("%.1fx" % (scale,), iaa.Affine(scale=scale)) for scale in [0.25, 0.5, 1.5, 2.0]]),
         (0, "Affine: Translate", [("x=%d y=%d" % (x, y), iaa.Affine(translate_px={"x": x, "y": y})) for x, y in [(int(-image.shape[1]*0.1), int( -image.shape[1]*0.1 )),
-                                                                                                                     (int(-image.shape[1]*0.15),int( -image.shape[1]*0.1 )),
-                                                                                                                     (int(-image.shape[1]*0.1), int( -image.shape[1]*0.15)),
+                                                                                                                     (int(-image.shape[1]*0.2),int( -image.shape[1]*0.1 )),
+                                                                                                                     (int(-image.shape[1]*0.1), int( -image.shape[1]*0.2)),
                                                                                                                      (int( image.shape[1]*0.1), int(  image.shape[1]*0.1 )),
-                                                                                                                     (int( image.shape[1]*0.15),int(  image.shape[1]*0.15))
+                                                                                                                     (int( image.shape[1]*0.2),int(  image.shape[1]*0.2))
                                                                                                                       ]]),
-        (0, "Affine: Rotate", [("%d deg" % (rotate,), iaa.Affine(rotate=rotate)) for rotate in [-90, -75, -45, -30, -15, 0, 15, 30, 45, 75, 90]]),
-        (0, "Affine: Shear", [("%d deg" % (shear,), iaa.Affine(shear=shear)) for shear in [-45, -25, 0, 25, 45]]),
+        (0, "Affine: Rotate", [("%d deg" % (rotate,), iaa.Affine(rotate=rotate)) for rotate in [-90, -75, -45, -30, -15, 15, 30, 45, 75, 90]]),
+        (0, "Affine: Shear", [("%d deg" % (shear,), iaa.Affine(shear=shear)) for shear in [-45, -25,  25, 45]]),
         (0, "Affine: Modes", [(mode, iaa.Affine(translate_px=-32, mode=mode)) for mode in ["edge"]]),
         (
             2, "Affine: all", [
                 (
                     "",
                     iaa.Affine(
-                        scale={"x": (0.125, 0.75), "y": (0.125, 0.75)},
+                        scale={"x": (0.25, 0.75), "y": (0.25, 0.75)},
                         # scale images to 80-120% of their size, individually per axis
                         translate_percent={"x": (-0.25, 0.25), "y": (-0.25, 0.25)},
                         # translate by -20 to +20 percent (per axis)
@@ -190,13 +189,15 @@ def draw_per_augmenter_images(img_path,idx):
     m = 0
     for (row_name, row_images, row_keypoints, row_titles) in rows:
         #output_image = ExamplesImage(128, 128, 128+64, 32)
-        row_images_kps = []
         for image, keypoints in zip(row_images, row_keypoints):
-            #row_images_kps.append(keypoints.draw_on_image(image, size=15))
+
             m +=1
-            print("[draw_per_augmenter_images] Saving augmented images...")
-            misc.imsave("image_%05d_%05d.jpg" % (m, idx), image)
-            ff = open("image_%05d_%05d.txt" % (m, idx), 'a')
+            #print("[draw_per_augmenter_images] Saving augmented images...")
+
+            keypoints.draw_on_image(image, size=40)
+            misc.imsave("DB/image_%05d_%05d.jpg" % (m, idx), image)
+            #misc.imsave("DB/kpt_image_%05d_%05d.jpg" % (m, idx), image)
+            ff = open("DB/image_%05d_%05d.txt" % (m, idx), 'a')
             x = 0
             while True:
                 if 4*x == len(keypoints.keypoints): break
@@ -204,7 +205,12 @@ def draw_per_augmenter_images(img_path,idx):
                 cy_ = (keypoints.keypoints[4*x].y + keypoints.keypoints[2+4*x].y) / (2 * image.shape[0])
                 w_ = (keypoints.keypoints[2+4*x].x - keypoints.keypoints[4*x].x) / image.shape[1]
                 h_ = (keypoints.keypoints[2+4*x].y - keypoints.keypoints[4*x].y) / image.shape[0]
-                data = classId[x] + ' ' + str(cx_) + ' ' + str(cx_) + ' ' + str(cx_) + ' ' + str(cx_) + '\n'
+                if (w_ < 1 / (13.0) or h_ < 1 / (13.0)): 
+                    data = str('32') + ' ' + str(cx_) + ' ' + str(cy_) + ' ' + str(w_) + ' ' + str(h_) + '\n'
+                elif ((w_ < 3.0 / (13.0) and w_ > 1 / (13.0)) or (h_ < 3.0 / (13.0) and h_ > 3.0 / (13.0))) :
+                    data = str('33') + ' ' + str(cx_) + ' ' + str(cy_) + ' ' + str(w_) + ' ' + str(h_) + '\n'
+                else: 
+                    data = str('15') + ' ' + str(cx_) + ' ' + str(cy_) + ' ' + str(w_) + ' ' + str(h_) + '\n'
                 ff.write(data)
                 x += 1
             ff.close()
