@@ -1,5 +1,4 @@
 # asrada
-main reference : https://github.com/Theano/Theano/issues/5348
 
 Download gits N follow their installation, respectively
 1. DeepSpeech : https://github.com/mozilla/DeepSpeech
