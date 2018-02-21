@@ -18,7 +18,9 @@ move all.names to data folder, all.data and tiny-yolo.cfg to cfg folder in darkn
  
 detection test : ./darknet detector demo cfg/all.data cfg/tiny-yolo.cfg tiny-yolo_49000.backup output.avi -i 0
 
-By optimizing darknet, I got 3 times faster results(160~200 FPS) with tiny-yolo in all process(not only prediction step but including all pre/post image processing step). without Opt, normally tiny-yolo runs in 50~60 FPS. 
+By optimizing darknet, I got 3 times faster results with tiny-yolo in all process.
+It runs in 160~200 FPS(not only prediction step but including all pre/post image processing step).
+Without Opt, normally tiny-yolo runs in 50~60 FPS. 
 It was tested on i7 and GTX 1080.
 
 Roughly, it runs in 50~60 FPS on Jetson TX2.
