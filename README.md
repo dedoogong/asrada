@@ -29,3 +29,4 @@ TODO :
 3. apply prunning
 
 I guess after all opts are applied, it would run in more than 100 FPS on TX2 and model size would be less than 10MB with the same mAP(around 70~80). 
+ 
