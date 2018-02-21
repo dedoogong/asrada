@@ -17,3 +17,15 @@ and download detection model for darknet and all other files(names, cfg,data,avi
 move all.names to data folder, all.data and tiny-yolo.cfg to cfg folder in darknet folder.
  
 detection test : ./darknet detector demo cfg/all.data cfg/tiny-yolo.cfg tiny-yolo_49000.backup output.avi -i 0
+
+By optimizing darknet, I got 3 times faster results(160~200 FPS) with tiny-yolo in all process(not only prediction step but including all pre/post image processing step). without Opt, normally tiny-yolo runs in 50~60 FPS. 
+It was tested on i7 and GTX 1080.
+
+Roughly, it runs in 50~60 FPS on Jetson TX2.
+
+TODO : 
+1. replace tiny-yolo's feature extraction with mobilenet based darknet. 
+2. change FP32 to FP16
+3. apply prunning
+
+I guess after all opts are applied, it would run in more than 100 FPS on TX2 and model size would be less than 10MB with the same mAP(around 70~80). 
