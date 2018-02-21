@@ -4,7 +4,7 @@ Download gits N follow their installation, respectively
 1. DeepSpeech : https://github.com/mozilla/DeepSpeech
 2. DeepHand : https://github.com/lmb-freiburg/hand3d
 3. DeepAlignmentNetwork(Theano) : https://github.com/MarekKowalski/DeepAlignmentNetwork
-    if you dont want to you DAN, you can use OpenFace instead. 
+    if you dont want to use DAN, you can use OpenFace instead. 
     https://github.com/TadasBaltrusaitis/OpenFace
 
 4. Darknet : https://github.com/pjreddie/darknet
