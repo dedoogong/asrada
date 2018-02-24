@@ -9,9 +9,11 @@ Run, r.sh, it will install all(I refered pyyolo)
 Download pretrained models and save each model to each project's model folder
 and download detection model for darknet and all other files(names, cfg,data,avi)
 > https://www.dropbox.com/sh/9r0lju9ju2nlof4/AACxeIxOOZMhrTc23p6RVXmOa?dl=0
+
+
 I  recommand to use python3, not python2. 
 
->>python3 ./test_2webcam.py
+$python3 ./test_2webcam.py
 
 Roughly, it runs in 25 FPS(depending on how many objs are found because of get_region_box and NMS) on Jetson TX2.
 
