@@ -1,6 +1,6 @@
 # asrada
 
-For testing car/hand/face/traffic sign detection, you must connect one webcam to TX2. 
+For testing car/hand/face/traffic sign detection, you must connect one usb webcam and i2s mic/speaker like ReSpeaker/Breakout board to TX2.
 
 Download asurada_detector.zip and darknet.zip, then unzip both and move darknet folder into asurada_detector folder. 
 
