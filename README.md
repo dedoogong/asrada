@@ -27,6 +27,13 @@ For others, download gits N follow their installation, respectively
     https://github.com/TadasBaltrusaitis/OpenFace
 4. OpenPose : https://github.com/CMU-Perceptual-Computing-Lab/openpose
 
+In case of DeepHand, please download quantized_graph.pb for testing. 
+ I use just middle part of the whole model, 'PoseNet'. I removed 'HandSegNet' and 'PosePriorNet, ViewPointNet' and I quantized the 'PoseNet' part to get the reduced and faster model. Size is changed from 188.4MB(2 pickles) -> 70 MB(1 frozen pb) -> 17.6 MB(1 quantized_graph.pb)
+
+In case of DeepSpeech, you need to modify some sourced to build it on TX2. Please read really carefully of the instruction. 
+I had such a hard time to build it finally successfully. 
+Bcus of the RNN(bidirection network connection), it fails in quantization in TF or TRT. But fortunately, I can run it using GPUs! (Original version just support only armv6 CPU).
+
 TODO : More optimization for speed!
 
 1. replace tiny-yolo's feature extraction with mobilenet based darknet. 
