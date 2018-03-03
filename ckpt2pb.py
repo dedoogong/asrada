@@ -61,8 +61,8 @@ def freeze_graph(model_dir, output_node_names,export_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_dir", type=str, default="/home/lee/Downloads/Classify-HandGesturePose-master/posemodel/", help="Model folder to export")
-    parser.add_argument("--output_node_names", type=str, default="MatMul", help="The name of the output nodes, comma separated.")
+    parser.add_argument("--model_dir", type=str, default="/home/lee/Downloads/Classify-HandGesturePose-master/pose2d/", help="Model folder to export")
+    parser.add_argument("--output_node_names", type=str, default="ResizeBilinear", help="The name of the output nodes, comma separated.")
     args = parser.parse_args()
 
     freeze_graph(args.model_dir, args.output_node_names, "/home/lee/Downloads/Classify-HandGesturePose-master/posemodel/")
