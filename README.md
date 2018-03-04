@@ -27,6 +27,8 @@ For others, download gits N follow their installation, respectively
     https://github.com/TadasBaltrusaitis/OpenFace
 4. OpenPose : https://github.com/CMU-Perceptual-Computing-Lab/openpose
 
+In case of DAN, I replaced the existing Theano based DAN with TF based one for optimization. Please refer to DataPrepare.py for DB setup in npz format. run DAN.py for training. I uploaded pre built image set in npz format in dropbox. 
+
 In case of DeepHand, please download quantized_graph.pb for testing. 
  I use just middle part of the whole model, 'PoseNet'. I removed 'HandSegNet' and 'PosePriorNet, ViewPointNet' and I quantized the 'PoseNet' part to get the reduced and faster model. Size is changed from 188.4MB(2 pickles) -> 70 MB(1 frozen pb) -> 17.6 MB(1 quantized_graph.pb)
 
