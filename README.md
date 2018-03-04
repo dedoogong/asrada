@@ -29,6 +29,9 @@ For others, download gits N follow their installation, respectively
 
 In case of DAN, I replaced the existing Theano based DAN with TF based one for optimization. Please refer to DataPrepare.py for DB setup in npz format. run DAN.py for training. I uploaded pre built image set in npz format in dropbox. 
 
+## UPDATE ## It runs > 25 FPS. I modified the existing net architecture a lot. I removed all stage 2 net and replaced all conv with separable dw conv(270MB->7MB!!). it runs x2 faster!!
+Please use DAN_stage1_spdw.py instead of DAN.py
+
 In case of DeepHand, please download quantized_graph.pb for testing. 
  I use just middle part of the whole model, 'PoseNet'. I removed 'HandSegNet' and 'PosePriorNet, ViewPointNet' and I quantized the 'PoseNet' part to get the reduced and faster model. Size is changed from 188.4MB(2 pickles) -> 70 MB(1 frozen pb) -> 17.6 MB(1 quantized_graph.pb)
 
