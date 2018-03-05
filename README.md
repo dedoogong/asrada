@@ -13,6 +13,9 @@ and download detection model for darknet and all other files(names, cfg,data,avi
 > https://www.dropbox.com/sh/9r0lju9ju2nlof4/AACxeIxOOZMhrTc23p6RVXmOa?dl=0
 
 
+##UPDATE : I succeed in converting yolov2 model to caffe version. I uploaded it on dropbbox too. I'm trying to  convert it to tensorRT! (I think  caffe based TRT is faster than TF based TRT). 
+
+
 I  recommand to use python3, not python2. 
 
 $python3 ./test_2webcam.py
