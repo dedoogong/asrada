@@ -13,8 +13,9 @@ and download detection model for darknet and all other files(names, cfg,data,avi
 > https://www.dropbox.com/sh/9r0lju9ju2nlof4/AACxeIxOOZMhrTc23p6RVXmOa?dl=0
 
 
-##UPDATE : I succeed in converting yolov2 model to caffe version. I uploaded it on dropbbox too. I'm trying to  convert it to tensorRT! (I think  caffe based TRT is faster than TF based TRT). 
-
+## UPDATE
+I succeed in converting yolov2 model to caffe version. I uploaded it on naver cloud too. I'm trying to  convert it to tensorRT! (I think  caffe based TRT is faster than TF based TRT). I'm trying to get the detection box based on python again!
+http://naver.me/GWGiBG8R
 
 I  recommand to use python3, not python2. 
 
@@ -32,7 +33,8 @@ For others, download gits N follow their installation, respectively
 
 In case of DAN, I replaced the existing Theano based DAN with TF based one for optimization. Please refer to DataPrepare.py for DB setup in npz format. run DAN.py for training. I uploaded pre built image set in npz format in dropbox. 
 
-## UPDATE ## It runs > 25 FPS. I modified the existing net architecture a lot. I removed all stage 2 net and replaced all conv with separable dw conv(270MB->7MB!!). it runs x2 faster!!
+## UPDATE
+It runs > 25 FPS. I modified the existing net architecture a lot. I removed all stage 2 net and replaced all conv with separable dw conv(270MB->7MB!!). it runs x2 faster!!
 Please use DAN_stage1_spdw.py instead of DAN.py
 
 In case of DeepHand, please download quantized_graph.pb for testing. 
