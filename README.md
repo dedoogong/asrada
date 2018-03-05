@@ -15,7 +15,8 @@ and download detection model for darknet and all other files(names, cfg,data,avi
 
 ## UPDATE
 I succeed in converting yolov2 model to caffe version. I uploaded it on naver cloud too. I'm trying to  convert it to tensorRT! (I think  caffe based TRT is faster than TF based TRT). I'm trying to get the detection box based on python again!
-http://naver.me/GWGiBG8R
+yolov2 caffemodel : http://naver.me/GWGiBG8R
+yolov2 prototxt : http://naver.me/5JoGu38j
 
 I  recommand to use python3, not python2. 
 
