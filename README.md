@@ -24,6 +24,10 @@ yolov2 prototxt : http://naver.me/5JoGu38j
 ![GitHub Logo](/giraffe_results.png) 
 ![GitHub Logo](/dog_results.png) 
 
+
+
+
+
 I  recommand to use python3, not python2. 
 
 $python3 ./test_2webcam.py
