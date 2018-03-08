@@ -19,8 +19,7 @@ yolov2 caffemodel : http://naver.me/GWGiBG8R
 yolov2 prototxt : http://naver.me/5JoGu38j
 
 
-![GitHub Logo](/person_results.png)
-(url)
+![GitHub Logo](/person_results.png) 
 
 I  recommand to use python3, not python2. 
 
