@@ -20,7 +20,7 @@ yolov2 prototxt : http://naver.me/5JoGu38j
 
 
 ![GitHub Logo](/person_results.png)
-Format: ![Alt Text](url)
+(url)
 
 I  recommand to use python3, not python2. 
 
