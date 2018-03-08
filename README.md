@@ -18,11 +18,11 @@ I succeed in converting yolov2 model to caffe version. I uploaded it on naver cl
 yolov2 caffemodel : http://naver.me/GWGiBG8R
 yolov2 prototxt : http://naver.me/5JoGu38j
 
-![GitHub Logo](/person_results.png) 
-![GitHub Logo](/horses_results.png) 
-![GitHub Logo](/eagle_results.png) 
-![GitHub Logo](/giraffe_results.png) 
-![GitHub Logo](/dog_results.png) 
+![GitHub Logo](/NMS/person_results.png) 
+![GitHub Logo](/NMS/horses_results.png) 
+![GitHub Logo](/NMS/eagle_results.png) 
+![GitHub Logo](/NMS/giraffe_results.png) 
+![GitHub Logo](/NMS/dog_results.png) 
 
 
 
