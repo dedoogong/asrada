@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 
 def box_size_checker():
 
-    list = glob.glob('/home/lee/Downloads/imgaug-master/annotations/*.xml')
+    list = glob.glob('/home/lee/Downloads/imgaug-master/annotations3/*.xml')
 
     for annotationPath in list:
         try:
@@ -30,7 +30,7 @@ def box_size_checker():
                     bndboxObj.find('ymin').text = (ymin - 10).__str__()
                     bndboxObj.find('ymax').text = (ymax + 10).__str__()
 
-                if (xmax-xmin) < 2 or (ymax-ymin) < 2 :
+                if (xmax-xmin) < 20 or (ymax-ymin) < 10 :
                     print(root.find('filename'), (xmax-xmin), (ymax - ymin))
                     root.remove(objects[i])
 
