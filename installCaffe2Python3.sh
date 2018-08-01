@@ -1,3 +1,5 @@
+## install CUDA 9.2, nVIDIA graphic driver > 390.xx, cuDnn 7.2 first!
+
 sudo python3 -m pip install --upgrade pip
 sudo python3 -m pip install setuptools future numpy protobuf
 
@@ -21,3 +23,4 @@ locate caffe2 | grep /usr/local/include/caffe2
 
 python3 -c 'from caffe2.python import core' 2>/dev/null && echo "Success" || echo "Failure"
 python3 -c 'from caffe2.python import workspace; print(workspace.NumCudaDevices())'
+ 
