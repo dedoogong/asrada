@@ -1,5 +1,9 @@
 # asrada
-
+-----------------------------------------------------------------------------------------------------------------------------
+light head rcnn TF to caffe converting (on testing)
+tf2caffe.py
+weight_extractor.py
+-----------------------------------------------------------------------------------------------------------------------------
 For testing car/hand/face/traffic sign detection and gesture control or free talking, you must connect one usb webcam and i2s mic/speaker like ReSpeaker/Breakout board to TX2.
 
 Download asurada_detector.zip and darknet.zip, then unzip both and move darknet folder into asurada_detector folder. 
