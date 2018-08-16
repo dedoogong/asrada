@@ -1,4 +1,12 @@
 # asrada
+
+when converting Caffe2 -> Caffe, 
+Dont use normal Caffe(1.0.0), but use py-r-fcn-caffe(Inter Caffe, 1.0.0-rc3). 
+rather than my expectation, many parts are modified!
+>> after loading prototxt, normal caffe DONES'T show the PARAM!!!!!!!
+MUST merge 6~8 newly ported layers/headers/external modules/protos to the Intel-Caffe.
+That's the only way to solve the above problem!!!
+
 -----------------------------------------------------------------------------------------------------------------------------
 
 light head rcnn TF to caffe converting (on testing)
