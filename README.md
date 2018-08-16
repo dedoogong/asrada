@@ -1,5 +1,7 @@
 # asrada
 
+-----------------------------------------------------------------------------------------------------------------------------
+
 when converting Caffe2 -> Caffe, 
 Dont use normal Caffe(1.0.0), but use py-r-fcn-caffe(Inter Caffe, 1.0.0-rc3). 
 rather than my expectation, many parts are modified!
