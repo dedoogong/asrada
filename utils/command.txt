@@ -1,0 +1,1 @@
+python3 voc2coco.py  xmllist.txt /media/lee/07E773AB287E1BC5/image_aug_bakcup/imgaug-master/Annotations output.json
