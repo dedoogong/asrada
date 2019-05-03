@@ -1,0 +1,4 @@
+add new action(edit)
+modify/add resource(properties)
+make qt5py3
+python3 labelImg.py
