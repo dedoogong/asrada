@@ -1,0 +1,272 @@
+import sys
+sys.path.append('/home/lee/caffe/python')
+import caffe
+from collections import OrderedDict
+import torch.nn as nn
+import torch.nn.functional as F
+import torch
+import numpy as np
+from torch.autograd import Variable
+from prototxt import *
+import graphviz as gv
+layer_dict = {'ConvNdBackward'    : 'Convolution',
+              'ThresholdBackward' : 'ReLU',
+              'MaxPool2dBackward' : 'Pooling',
+              'AvgPool2dBackward' : 'Pooling',
+              'DropoutBackward'   : 'Dropout',
+              'AddmmBackward'     : 'InnerProduct',
+              'BatchNormBackward' : 'BatchNorm',
+              'AddBackward'       : 'Eltwise',
+              'SoftmaxBackward'   : 'Softmax',
+              'ViewBackward'      : 'Reshape',
+
+              'MkldnnConvolutionBackward' : 'Convolution',
+              'NativeBatchNormBackward': 'BatchNorm',
+              'ReluBackward1'     : 'ReLU',
+              'MaxPool2DWithIndicesBackward': 'Pooling',
+              'AddBackward0'      : 'Eltwise',
+              'MeanBackward1'     : 'Pooling',
+              #'TBackward'         : 'Reshape', #I'M NOT SURE,,, JUST 1000 ADD 1000,2048 OR JUST IGNORE? WHAT DOES IT DO?
+              # JUST ADDMMBACKWARD + TBACKWARD -> FC !!
+              'AvgPool2DBackward' : 'Pooling'}
+
+layer_id = 0
+def pytorch2caffe(input_var, output_var, protofile, caffemodel):
+    global layer_id
+    net_info = pytorch2prototxt(input_var, output_var)
+    print_prototxt(net_info)
+    save_prototxt(net_info, protofile)
+
+    net = caffe.Net(protofile, caffe.TEST)
+    params = net.params
+
+    layer_id = 1
+    seen = set()
+    def convert_layer(func):
+        if True:
+            global layer_id
+            parent_type = str(type(func).__name__)
+    
+            if hasattr(func, 'next_functions'):
+                for u in func.next_functions:
+                    if u[0] is not None:
+                        child_type = str(type(u[0]).__name__)
+                        child_name = child_type + str(layer_id)
+                        if child_type != 'AccumulateGrad' and (parent_type != 'AddmmBackward' or child_type != 'TransposeBackward') and parent_type != 'TBackward':
+                            if u[0] not in seen:
+                                convert_layer(u[0])
+                                seen.add(u[0])
+                            if child_type != 'ViewBackward':
+                                layer_id = layer_id + 1
+    
+            parent_name = parent_type+str(layer_id)
+            print('converting %s' % parent_name)
+            if parent_type == 'ConvNdBackward':
+                weights = func.next_functions[1][0].variable.data
+                if func.next_functions[2][0]:
+                    biases = func.next_functions[2][0].variable.data
+                else:
+                    biases = None
+                save_conv2caffe(weights, biases, params[parent_name])
+            elif parent_type == 'BatchNormBackward':
+                running_mean = func.running_mean
+                running_var = func.running_var
+                #print('%s running_mean' % parent_name, running_mean)
+                #exit(0)
+                scale_weights = func.next_functions[1][0].variable.data
+                scale_biases = func.next_functions[2][0].variable.data
+                bn_name = parent_name + "_bn"
+                scale_name = parent_name + "_scale"
+                save_bn2caffe(running_mean, running_var, params[bn_name])
+                save_scale2caffe(scale_weights, scale_biases, params[scale_name])
+            elif parent_type == 'AddmmBackward':
+                biases = func.next_functions[0][0].variable.data # AccumulateGrad
+                weights = func.next_functions[2][0].next_functions[0][0].variable.data # TBackward
+                save_fc2caffe(weights, biases, params[parent_name])
+        
+    convert_layer(output_var.grad_fn)
+    print('save caffemodel to %s' % caffemodel)
+    net.save(caffemodel)
+
+def save_conv2caffe(weights, biases, conv_param):
+    if biases is not None:
+        conv_param[1].data[...] = biases.numpy() 
+    conv_param[0].data[...] = weights.numpy() 
+
+def save_fc2caffe(weights, biases, fc_param):
+    fc_param[1].data[...] = biases.numpy() 
+    fc_param[0].data[...] = weights.numpy() 
+
+def save_bn2caffe(running_mean, running_var, bn_param):
+    bn_param[0].data[...] = running_mean.numpy()
+    bn_param[1].data[...] = running_var.numpy()
+    bn_param[2].data[...] = np.array([1.0])
+
+def save_scale2caffe(weights, biases, scale_param):
+    scale_param[1].data[...] = biases.numpy()
+    scale_param[0].data[...] = weights.numpy()
+
+#def pytorch2prototxt(model, x, var):
+def pytorch2prototxt(input_var, output_var):
+    global layer_id
+    net_info = OrderedDict()
+    props = OrderedDict()
+    props['name'] = 'pytorch'
+    props['input'] = 'data'
+    props['input_dim'] = input_var.size()
+    
+    layers = []
+
+    layer_id = 1
+    seen = set()
+    top_names = dict()
+    def add_layer(func):
+        global layer_id
+        parent_type = str(type(func).__name__)
+        parent_bottoms = []
+
+        if hasattr(func, 'next_functions'):
+            for u in func.next_functions:
+                if u[0] is not None:
+                    child_type = str(type(u[0]).__name__)
+                    child_name = child_type + str(layer_id)
+                    if child_type != 'AccumulateGrad' and (parent_type != 'AddmmBackward' or child_type != 'TransposeBackward'):
+                        if u[0] not in seen:
+                            top_name = add_layer(u[0])
+                            parent_bottoms.append(top_name)
+                            seen.add(u[0])
+                        else:
+                            top_name = top_names[u[0]]
+                            parent_bottoms.append(top_name)
+                        if child_type != 'ViewBackward':
+                            layer_id = layer_id + 1
+
+        parent_name = parent_type+str(layer_id)
+        layer = OrderedDict()
+        layer['name'] = parent_name
+        if parent_type != 'TBackward':
+            layer['type'] = layer_dict[parent_type]
+            parent_top = parent_name
+            if len(parent_bottoms) > 0:
+                layer['bottom'] = parent_bottoms
+            else:
+                layer['bottom'] = ['data']
+            layer['top'] = parent_top
+            if parent_type == 'ConvNdBackward' or  parent_type == 'MkldnnConvolutionBackward':
+                weights = func.next_functions[1][0].variable
+                conv_param = OrderedDict()
+                conv_param['num_output'] = weights.size(0)
+                conv_param['pad'] = int(func.next_functions[1][0].variable.shape[2]/2) #func.padding[0]
+                conv_param['kernel_size'] = weights.size(2)
+                # res3a_branch2a and res3a_branch1 --> stride = 2 56->28
+                # res4a_branch2a and res4a_branch1 --> stride = 2 28->14
+                # res5a_branch2a and res5a_branch1 --> stride = 2 14-> 7
+                if weights.size(2) == 7 or parent_name== 'MkldnnConvolutionBackward40' or parent_name == 'MkldnnConvolutionBackward49' \
+                                        or parent_name == 'MkldnnConvolutionBackward86'or parent_name == 'MkldnnConvolutionBackward95' \
+                                        or parent_name == 'MkldnnConvolutionBackward154' or parent_name == 'MkldnnConvolutionBackward163':
+
+                    conv_param['stride'] = 2 # func.stride[0]
+                else:
+                    conv_param['stride'] = 1 # func.stride[0]
+                if func.next_functions[2][0] == None:
+                    conv_param['bias_term'] = 'false'
+                layer['convolution_param'] = conv_param
+            elif parent_type == 'BatchNormBackward' or parent_type =='NativeBatchNormBackward':
+                bn_layer = OrderedDict()
+                bn_layer['name'] = parent_name + "_bn"
+                bn_layer['type'] = 'BatchNorm'
+                bn_layer['bottom'] = parent_bottoms
+                bn_layer['top'] = parent_top
+                batch_norm_param = OrderedDict()
+                batch_norm_param['use_global_stats'] = 'true'
+                bn_layer['batch_norm_param'] = batch_norm_param
+
+                scale_layer = OrderedDict()
+                scale_layer['name'] = parent_name + "_scale"
+                scale_layer['type'] = 'Scale'
+                scale_layer['bottom'] = parent_top
+                scale_layer['top'] = parent_top
+                scale_param = OrderedDict()
+                scale_param['bias_term'] = 'true'
+                scale_layer['scale_param'] = scale_param
+            elif parent_type == 'ThresholdBackward':
+                parent_top = parent_bottoms[0]
+            elif parent_type == 'SoftmaxBackward':
+                parent_top = parent_bottoms[0]
+            elif parent_type == 'MaxPool2dBackward' or parent_type == 'MaxPool2DWithIndicesBackward':
+                pooling_param = OrderedDict()
+                pooling_param['pool'] = 'MAX'
+                pooling_param['kernel_size'] = 3 # func.kernel_size[0]
+                pooling_param['stride'] = 2 # func.stride[0]
+                pooling_param['pad'] = 0 # int(pooling_param['kernel_size']/2) #func.padding[0]
+                layer['pooling_param']  = pooling_param
+            elif parent_type == 'AvgPool2dBackward' or parent_type == 'AvgPool2DBackward' or parent_type == 'MeanBackward1':
+                pooling_param = OrderedDict()
+                pooling_param['pool'] = 'AVE'
+                pooling_param['kernel_size'] = 7 #  func.kernel_size[0]
+                pooling_param['stride'] = 1 #func.stride[0]
+                layer['pooling_param'] = pooling_param
+            elif parent_type == 'DropoutBackward':
+                parent_top = parent_bottoms[0]
+                dropout_param = OrderedDict()
+                dropout_param['dropout_ratio'] = func.p
+                layer['dropout_param'] = dropout_param
+            elif parent_type == 'AddmmBackward':
+                inner_product_param = OrderedDict()
+                inner_product_param['num_output'] = func.next_functions[0][0].variable.size(0)
+                layer['inner_product_param'] = inner_product_param
+            elif parent_type == 'ViewBackward':
+                parent_top = parent_bottoms[0]
+            elif parent_type == 'AddBackward':
+                eltwise_param = OrderedDict()
+                eltwise_param['operation'] = 'SUM'
+                layer['eltwise_param'] = eltwise_param
+
+            layer['top'] = parent_top # reset layer['top'] as parent_top may change
+            if parent_type != 'ViewBackward':
+                if parent_type == "BatchNormBackward" or parent_type =='NativeBatchNormBackward':
+                    layers.append(bn_layer)
+                    layers.append(scale_layer)
+                else:
+                    layers.append(layer)
+                #layer_id = layer_id + 1
+            top_names[func] = parent_top
+            return parent_top
+    
+    add_layer(output_var.grad_fn)
+    net_info['props'] = props
+    net_info['layers'] = layers
+    return net_info
+
+if __name__ == '__main__':
+    import torchvision
+    import timm
+    from visualize import make_dot
+
+    model_name = 'resnet50'
+
+    if model_name == 'resnet50':
+        m = torchvision.models.resnet50(pretrained=True)
+    elif model_name == 'vgg16':
+        m = torchvision.models.vgg16()
+        m.classifier.add_module('softmax', torch.nn.Softmax())
+    elif model_name == 'resnet26d':
+        m = timm.create_model('resnet26d', pretrained=True)#.cuda()
+    m.eval() # very important here, otherwise batchnorm running_mean, running_var will be incorrect
+    input_var = Variable(torch.rand(1, 3, 224, 224))
+
+    print(m)
+    output_var = m(input_var)
+    fp = open("out.dot", "w")
+    dot = make_dot(output_var)
+    #print >> fp, dot
+    dot.render('test-output/round-table.gv', view=False)#True
+    fp.close()
+    #exit(0)
+
+    if model_name == 'resnet50':
+        pytorch2caffe(input_var, output_var, 'resnet50-pytorch2caffe.prototxt', 'resnet50-pytorch2caffe.caffemodel')
+    elif model_name == 'vgg16':
+        pytorch2caffe(input_var, output_var, 'vgg16-pytorch2caffe.prototxt', 'vgg16-pytorch2caffe.caffemodel')
+    elif model_name == 'resnet26d':
+        pytorch2caffe(input_var, output_var, 'resnet26d-pytorch2caffe.prototxt', 'resnet26d-pytorch2caffe.caffemodel')
